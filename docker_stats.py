@@ -1,3 +1,5 @@
+#usage 
+# python docker_stats.py 10 output.txt
 import subprocess 
 import re
 import datetime
