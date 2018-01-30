@@ -15,7 +15,6 @@ def poll_data():
         data = re.split('\s+',line)
         key = data[0]
         cpu = data[2]
-        print(data)
         if key in record:
            output += "{},{},".format(record[key],cpu)
     return output
@@ -42,7 +41,6 @@ for line in p.stdout.readlines():
     key  = data2[0]
     value = data2[1]
     record[key] = value
-print(record)
 
 
 ### 2nd phase
