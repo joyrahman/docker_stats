@@ -1,1 +1,2 @@
 # add cloudsys to docker group
+sudo gpasswd -a cloudsys docker 
