@@ -49,7 +49,7 @@ for line in p.stdout.readlines():
 # write ts, cont_id, cpu
 f = open(file_name,'w')
 for i in xrange(iteration):
-    output = poll_data() + "\n"
+    output = `i` +"," + poll_data() + "\n"
     f.write(output)
     print ".",
     time.sleep(5)
