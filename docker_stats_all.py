@@ -2,27 +2,31 @@
 # python docker_stats.py 10 output.txt
 import subprocess 
 import re
-import datetime
+#import datetime
+from datetime import datetime
 import sys
 import time
-
+import socket
 def poll_data():
-    p = subprocess.Popen('docker stats --no-stream', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    #p = subprocess.Popen('docker stats --no-stream', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     p = subprocess.Popen('docker stats --all --format "table {{.ID}},{{.CPUPerc}},{{.MemUsage}},{{.NetIO}},{{.BlockIO}}" --no-stream', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    ts = datetime.datetime.utcnow()
-    output = "{},".format(ts)
-
+    #ts = datetime.datetime.utcnow()
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    #output = "{},".format(ts)
+    hostname = (socket.gethostname())
+    output = ""
     for line in p.stdout.readlines()[1:]:
         #data = re.split('\s+',line)
-        data = line.split(',')
+        data = line.rstrip('\n').split(',')
         key = data[0]
         cpu = data[1]
         mem = data[2]
         net = data[3]
         io = data[4]
-
+        pk = "{}_{}".format(key,ts)
         if key in record:
-           output += "{},{},{},{},{}".format(record[key],cpu,mem,net,io)
+           output += "{},{},{},{},{},{},{},{}\n".format(pk,ts,record[key],cpu,mem,net,io,hostname)
+           #output += "{},{},{},{},{},{},{}\n".format(key,ts,record[key],cpu,mem,net,hostname)
     return output
 
 
@@ -56,7 +60,8 @@ for line in p.stdout.readlines():
 f = open(file_name,'w')
 for i in xrange(iteration):
     #output = `i` +"," + poll_data() + "\n"
-    output = `i` +"," + poll_data() 
+    #output = `i` +"," + poll_data() 
+    output = poll_data() 
     f.write(output)
     print ".",
     time.sleep(5)
